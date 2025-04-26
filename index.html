@@ -6,9 +6,11 @@
   <meta name="description" content="Support for teen mental health challenges in today's society.">
   <title>Teen Mental Health Support</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header class="header">
+  <!-- Header -->
+  <header class="header fade-in-up">
     <div class="container">
       <h1>Teen Mental Health Support</h1>
       <nav>
@@ -16,64 +18,89 @@
           <li><a href="#about">About</a></li>
           <li><a href="#challenges">Challenges</a></li>
           <li><a href="#resources">Resources</a></li>
+          <li><a href="#mood-tracker">Mood Tracker</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <section class="hero">
+  <!-- Hero Section -->
+  <section class="hero fade-in-up">
     <div class="container">
       <h2>You Are Not Alone</h2>
-      <p>We are here to help teens face mental health challenges with strength, hope, and support.</p>
-      <a href="#contact" class="btn-primary">Get Support</a>
+      <p>Facing mental health challenges is tough, but no one should face them alone. We are here to provide support, hope, and a community of care.</p>
+      <a href="#contact" class="btn-primary">Get Support Now</a>
     </div>
   </section>
 
-  <section id="about" class="section">
+  <!-- About Section -->
+  <section id="about" class="section fade-in-up">
     <div class="container">
       <h2>About Us</h2>
-      <p>We are a team of mental health advocates dedicated to empowering teenagers through education, outreach, and support systems.</p>
+      <p>We are a team of advocates, counselors, and volunteers committed to helping teenagers navigate mental health struggles. Through education, resources, and connection, we empower young people to seek help and build resilience.</p>
     </div>
   </section>
 
-  <section id="challenges" class="section light-bg">
+  <!-- Challenges Section -->
+  <section id="challenges" class="section light-bg fade-in-up">
     <div class="container">
       <h2>Challenges Teens Face</h2>
       <div class="grid">
         <div class="card">
-          <h3>Anxiety</h3>
-          <p>Social pressures and academic expectations can lead to overwhelming anxiety.</p>
+          <h3>Anxiety Disorders</h3>
+          <p>Social and academic pressures often lead to overwhelming anxiety. Early recognition can make a huge difference.</p>
         </div>
         <div class="card">
           <h3>Depression</h3>
-          <p>Feelings of sadness and hopelessness are more common than you might think — and treatable.</p>
+          <p>Isolation, hopelessness, and sadness affect many teens. Our support networks aim to break this cycle.</p>
         </div>
         <div class="card">
-          <h3>Bullying</h3>
-          <p>Online and in-person bullying impacts mental health and self-esteem deeply.</p>
+          <h3>Bullying & Cyberbullying</h3>
+          <p>Harassment online and offline can devastate self-esteem. Together, we fight back with compassion and strength.</p>
         </div>
         <div class="card">
           <h3>Identity Struggles</h3>
-          <p>Exploring identity can be challenging and isolating without proper support.</p>
+          <p>Exploring gender, race, culture, and personal identity can be overwhelming. We foster acceptance and courage.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="resources" class="section">
+  <!-- Resources Section -->
+  <section id="resources" class="section fade-in-up">
     <div class="container">
       <h2>Helpful Resources</h2>
       <ul class="resources-list">
-        <li><a href="#">National Suicide Prevention Lifeline</a></li>
-        <li><a href="#">Teen Mental Health Crisis Text Line</a></li>
-        <li><a href="#">Local Counseling Services Directory</a></li>
-        <li><a href="#">Mindfulness and Meditation Apps</a></li>
+        <li><a href="#">National Suicide Prevention Lifeline (Call 988)</a></li>
+        <li><a href="#">Crisis Text Line (Text HOME to 741741)</a></li>
+        <li><a href="#">Find a Therapist Near You</a></li>
+        <li><a href="#">Guided Meditation Apps</a></li>
       </ul>
     </div>
   </section>
 
-  <section id="contact" class="section light-bg">
+  <!-- Mood Tracker Section -->
+  <section id="mood-tracker" class="section light-bg fade-in-up">
+    <div class="container">
+      <h2>Track Your Mood</h2>
+      <label for="moodSlider">How are you feeling today?</label>
+      <input type="range" min="1" max="5" value="3" id="moodSlider" onchange="updateMood()">
+      <div id="emojiDisplay" style="font-size: 3rem; margin: 10px 0;">😐</div>
+      <canvas id="moodChart" width="400" height="200"></canvas>
+    </div>
+  </section>
+
+  <!-- Inspirational Quotes Section -->
+  <section id="quotes" class="section fade-in-up">
+    <div class="container">
+      <h2>Inspirational Quotes</h2>
+      <blockquote id="quoteText" style="font-size: 1.5rem; text-align: center; margin-top: 2rem;">"You are stronger than you think."</blockquote>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section fade-in-up">
     <div class="container">
       <h2>Contact Us</h2>
       <form id="contact-form">
@@ -85,12 +112,25 @@
     </div>
   </section>
 
-  <footer class="footer">
+  <!-- Footer -->
+  <footer class="footer fade-in-up">
     <div class="container">
       <p>&copy; 2025 Teen Mental Health Support. All rights reserved.</p>
     </div>
   </footer>
 
+  <!-- Crisis Help Popup -->
+  <button id="crisisButton" onclick="openCrisisPopup()">🚨 Crisis Help</button>
+
+  <div id="crisisPopup" class="popup">
+    <div class="popup-content">
+      <h2>Need Immediate Help?</h2>
+      <p>Call <strong>988</strong> or text <strong>HOME</strong> to <strong>741741</strong>.</p>
+      <button class="btn-primary" onclick="closeCrisisPopup()">Close</button>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
   <script src="scripts.js"></script>
 </body>
 </html>
