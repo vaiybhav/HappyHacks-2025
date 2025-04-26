@@ -1,0 +1,28 @@
+{
+  "name": "happyhacks-2025",
+  "version": "1.0.0",
+  "description": "",
+  "main": "contact.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vaiybhav/HappyHacks-2025.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vaiybhav/HappyHacks-2025/issues"
+  },
+  "homepage": "https://github.com/vaiybhav/HappyHacks-2025#readme",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.0",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "openai": "^4.96.0"
+  }
+}

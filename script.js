@@ -1,103 +1,79 @@
-// Smooth Fade-In Observer
-const faders = document.querySelectorAll('.fade-in-up');
+const body = document.body;
 
-const appearOptions = {
-  threshold: 0.2,
-  rootMargin: "0px 0px -50px 0px"
-};
+function loadParticles() {
+  particlesJS('particles-js', {
+    particles: {
+      number: {
+        value: 30,
+        density: { enable: true, value_area: 900 }
+      },
+      color: { value: "#aad4ff" },
+      shape: { type: "circle" },
+      opacity: {
+        value: 0.2,
+        random: false,
+        anim: { enable: false }
+      },
+      size: {
+        value: 2.5,
+        random: true,
+        anim: { enable: false }
+      },
+      move: {
+        enable: true,
+        speed: 0.5,
+        direction: "none",
+        random: false,
+        straight: false,
+        out_mode: "out"
+      }
+    },
+    interactivity: {
+      events: {
+        onhover: { enable: false },
+        onclick: { enable: false }
+      }
+    },
+    retina_detect: true
+  });
+}
 
-const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) {
-      return;
+window.addEventListener('DOMContentLoaded', () => {
+  const modeToggle = document.getElementById('mode-toggle');
+  const modeIcon = document.getElementById('mode-icon');
+  const navbar = document.querySelector('.navbar');
+
+  body.classList.add('light');
+  loadParticles();
+
+  function setMoonIcon() {
+    modeIcon.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    `;
+  }
+
+  function setSunIcon() {
+    modeIcon.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
+        <path d="M12 4.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 17a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm9-9a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm-17 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm15.071-6.071a1 1 0 1 0-1.414-1.414 1 1 0 0 0 1.414 1.414zm-12.728 0a1 1 0 1 0-1.414-1.414 1 1 0 0 0 1.414 1.414zm12.728 12.728a1 1 0 1 0-1.414 1.414 1 1 0 0 0 1.414-1.414zm-12.728 0a1 1 0 1 0-1.414 1.414 1 1 0 0 0 1.414-1.414zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/>
+      </svg>
+    `;
+  }
+
+  // Set initial icon for light mode (show moon to suggest dark mode switch)
+  setMoonIcon();
+
+  modeToggle.addEventListener('click', () => {
+    if (body.classList.contains('dark')) {
+      body.classList.remove('dark');
+      body.classList.add('light');
+      setMoonIcon();
     } else {
-      entry.target.classList.add('appear');
-      appearOnScroll.unobserve(entry.target);
+      body.classList.remove('light');
+      body.classList.add('dark');
+      setSunIcon();
     }
   });
-}, appearOptions);
-
-faders.forEach(fader => {
-  appearOnScroll.observe(fader);
-});
-
-// Crisis Popup
-function openCrisisPopup() {
-  document.getElementById('crisisPopup').style.display = 'flex';
-}
-
-function closeCrisisPopup() {
-  document.getElementById('crisisPopup').style.display = 'none';
-}
-
-// Inspirational Quotes Rotator
-const quotes = [
-  "You are stronger than you think.",
-  "Every day is a second chance.",
-  "Your mental health matters.",
-  "Believe in yourself even when it's hard.",
-  "Storms don't last forever."
-];
-
-let quoteIndex = 0;
-const quoteText = document.getElementById('quoteText');
-
-function rotateQuote() {
-  quoteIndex = (quoteIndex + 1) % quotes.length;
-  quoteText.textContent = `"${quotes[quoteIndex]}"`;
-}
-
-setInterval(rotateQuote, 7000); // Change quote every 7 seconds
-
-// Mood Tracker
-const moodSlider = document.getElementById('moodSlider');
-const emojiDisplay = document.getElementById('emojiDisplay');
-
-const moodEmojis = {
-  1: "😭",
-  2: "😔",
-  3: "😐",
-  4: "🙂",
-  5: "😄"
-};
-
-let moodData = [];
-let moodLabels = [];
-
-function updateMood() {
-  const mood = moodSlider.value;
-  emojiDisplay.textContent = moodEmojis[mood];
-  const currentTime = new Date().toLocaleTimeString();
-  moodLabels.push(currentTime);
-  moodData.push(parseInt(mood));
-  moodChart.update();
-}
-
-const ctx = document.getElementById('moodChart').getContext('2d');
-const moodChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: moodLabels,
-    datasets: [{
-      label: 'Mood Over Time',
-      data: moodData,
-      borderColor: '#0059b3',
-      backgroundColor: 'rgba(0,89,179,0.1)',
-      tension: 0.4
-    }]
-  },
-  options: {
-    responsive: true,
-    scales: {
-      y: {
-        min: 1,
-        max: 5,
-        ticks: {
-          callback: function(value) {
-            return moodEmojis[value];
-          }
-        }
-      }
-    }
-  }
 });

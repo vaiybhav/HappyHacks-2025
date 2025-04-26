@@ -1,0 +1,117 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>You Are Seen 💖 - Mood Predictor</title>
+  <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, #a8edea, #fed6e3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+      max-width: 700px;
+      width: 90%;
+    }
+    h1 {
+      margin: 0 0 20px;
+      color: #333;
+      font-size: 2.5rem;
+      animation: fadeIn 1.5s ease both;
+    }
+    video {
+      width: 100%;
+      max-width: 640px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+      animation: fadeIn 2s ease both;
+    }
+    #emotionDisplay {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #333;
+      margin-top: 10px;
+      animation: fadeIn 2.5s ease both;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>You Are Seen 💖</h1>
+    <video id="video" autoplay muted playsinline></video>
+    <div id="emotionDisplay">Loading your beautiful smile...</div>
+  </div>
+
+  <script>
+    const video = document.getElementById('video');
+    const emotionDisplay = document.getElementById('emotionDisplay');
+
+    const EMOJI_MAP = {
+      happy: '😄 Happy',
+      sad: '😢 Sad',
+      angry: '😠 Angry',
+      surprised: '😲 Surprised',
+      neutral: '😐 Neutral',
+      fearful: '😨 Fear',
+      disgusted: '🤢 Disgust'
+    };
+
+    async function setupCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+        video.srcObject = stream;
+      } catch (error) {
+        emotionDisplay.innerText = 'Error accessing your camera 😔';
+        console.error(error);
+      }
+    }
+
+    async function loadModels() {
+      await faceapi.nets.tinyFaceDetector.loadFromUri('https://justadudewhohacks.github.io/face-api.js/models');
+      await faceapi.nets.faceExpressionNet.loadFromUri('https://justadudewhohacks.github.io/face-api.js/models');
+    }
+
+    async function detectEmotion() {
+      const options = new faceapi.TinyFaceDetectorOptions();
+      setInterval(async () => {
+        const detection = await faceapi.detectSingleFace(video, options).withFaceExpressions();
+        if (detection && detection.expressions) {
+          const expressions = detection.expressions;
+          const mood = Object.keys(expressions).reduce((a, b) => expressions[a] > expressions[b] ? a : b);
+          const moodDisplay = EMOJI_MAP[mood] || '😐 Neutral';
+          emotionDisplay.innerText = moodDisplay;
+        } else {
+          emotionDisplay.innerText = 'No face detected, but you are still amazing 💖';
+        }
+      }, 500);
+    }
+
+    async function start() {
+      await setupCamera();
+      await loadModels();
+      detectEmotion();
+    }
+
+    start();
+  </script>
+</body>
+</html>

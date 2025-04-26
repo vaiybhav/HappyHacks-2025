@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mindful Teens | Challenges</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Mindful Teens</div>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="challenges.html">Challenges</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="ai.html">AI Tools</a></li>
+        </ul>
+      </nav>
+
+  <section class="section">
+    <h2>Major Challenges Teens Face Today</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Social Media Pressure</h3>
+        <p>Facing comparisons and online bullying can impact teens' self-esteem and well-being.</p>
+      </div>
+      <div class="card">
+        <h3>Academic Stress</h3>
+        <p>Pressure from school can cause anxiety, stress, and fear of failure in teens.</p>
+      </div>
+      <div class="card">
+        <h3>Loneliness and Isolation</h3>
+        <p>Despite digital connections, emotional isolation remains a challenge for many teens.</p>
+      </div>
+    </div>
+  </section>
+
+  <button id="mode-toggle" style="position: fixed; bottom: 20px; left: 20px; z-index: 999; font-size: 24px; background-color: #3366cc; color: white; border: none; border-radius: 20px; padding: 10px 14px; cursor: pointer;">
+    <svg id="mode-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
+      <!-- Moon icon for light mode -->
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </button>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('mode-toggle');
+    const modeIcon = document.getElementById('mode-icon');
+    const body = document.body;
+
+    function updateModeIcon() {
+      if (body.classList.contains('dark')) {
+        // Show sun icon in dark mode
+        modeIcon.innerHTML = '<path d="M12 4.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 17a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm9-9a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm-17 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm15.071-6.071a1 1 0 1 0-1.414-1.414 1 1 0 0 0 1.414 1.414zm-12.728 0a1 1 0 1 0-1.414-1.414 1 1 0 0 0 1.414 1.414zm12.728 12.728a1 1 0 1 0-1.414 1.414 1 1 0 0 0 1.414-1.414zm-12.728 0a1 1 0 1 0-1.414 1.414 1 1 0 0 0 1.414-1.414zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/>';
+      } else {
+        // Show moon icon in light mode
+        modeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+      }
+    }
+
+    // Initialize theme and icon
+    if (!body.classList.contains('light') && !body.classList.contains('dark')) {
+      body.classList.add('light');
+    }
+    updateModeIcon();
+
+    toggleBtn.addEventListener('click', () => {
+      body.classList.toggle('dark');
+      body.classList.toggle('light');
+      updateModeIcon();
+    });
+  });
+</script>
+
+</body>
+</html>
