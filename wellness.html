@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mindful Tracker | AI Wellness Tracker</title>
+</head>
+<style>
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.spinner {
+  animation: spin 1s linear infinite;
+}
+</style>
+<head>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <div id="particles-js"></div>
+
+  <nav class="navbar" style="z-index: 2; position: relative;">
+    <div class="nav-container" style="display: flex; flex-direction: column; align-items: center;">
+      <div class="logo" style="margin-bottom: 10px; font-size: 28px;">Mindful Teens</div>
+      <ul class="nav-links" style="display: flex; gap: 20px;">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="challenges.html">Challenges</a></li>
+        <li><a href="resources.html">Resources</a></li>
+        <li><a href="ai.html">AI Tools</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main style="min-height: 90vh; display: flex; flex-direction: column; align-items: center; padding: 40px;">
+    <div style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); padding: 30px; border-radius: 20px; max-width: 900px; width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.2);">
+      <h1 style="margin-bottom: 20px; text-align: center;">AI Wellness Tracker</h1>
+
+      <div style="margin-bottom: 20px; text-align: center;">
+        <button onclick="changeMonth(-1)" style="background-color: #3366cc; color: white; border: none; padding: 8px 16px; border-radius: 8px; margin-right: 10px; cursor: pointer;">⬅️ Prev</button>
+        <span id="monthYear" style="font-weight: bold;"></span>
+        <button onclick="changeMonth(1)" style="background-color: #3366cc; color: white; border: none; padding: 8px 16px; border-radius: 8px; margin-left: 10px; cursor: pointer;">Next ➡️</button>
+      </div>
+
+      <div id="calendar" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; max-width: 800px; width: 100%;"></div>
+
+      <div style="margin-top: 30px; text-align: center;">
+        <button onclick="analyzeMood()" style="background-color: #3366cc; color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;">Get AI Mood Summary</button>
+      </div>
+
+      <div id="analysisResult" style="margin-top: 20px; background: rgba(255,255,255,0.85); color: #333; padding: 20px; border-radius: 15px; display: none; font-size: 16px; font-weight: 500; max-width: 700px; margin-left: auto; margin-right: auto; text-align: center;"></div>
+
+      <div id="entryModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255,255,255,0.95); padding: 20px; border-radius: 15px; box-shadow: 0 0 20px rgba(0,0,0,0.3); z-index: 999;">
+        <h2 id="entryDate"></h2>
+        <textarea id="moodText" rows="2" style="width: 100%; margin-bottom: 10px; padding: 10px; border-radius: 8px;" placeholder="How are you feeling today?"></textarea>
+        <br>
+        <input id="moodRating" type="number" min="1" max="10" style="width: 100%; margin-bottom: 10px; padding: 10px; border-radius: 8px;" placeholder="Mood Rating (1-10)">
+        <br>
+        <input id="keywords" type="text" style="width: 100%; margin-bottom: 10px; padding: 10px; border-radius: 8px;" placeholder="Keywords (school, friends...)">
+        <br>
+        <button onclick="saveEntry()" style="background-color: #3366cc; color: white; border: none; padding: 8px 20px; border-radius: 8px;">Save</button>
+        <button onclick="closeModal()" style="margin-left: 10px; background: none; border: none; color: #666;">Cancel</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let entries = {}; 
+    let currentYear, currentMonth;
+    let selectedDate;
+
+    function saveEntry() {
+      const moodText = document.getElementById('moodText').value.trim();
+      const moodRating = document.getElementById('moodRating').value.trim();
+      const keywords = document.getElementById('keywords').value.trim();
+
+      if (!moodText || !moodRating) {
+        alert('Please fill out mood text and rating.');
+        return;
+      }
+
+      entries[selectedDate] = { moodText, moodRating, keywords };
+      closeModal();
+      generateCalendar(currentYear, currentMonth);
+    }
+
+    function closeModal() {
+      document.getElementById('entryModal').style.display = 'none';
+      selectedDate = null;
+      document.getElementById('moodText').value = '';
+      document.getElementById('moodRating').value = '';
+      document.getElementById('keywords').value = '';
+    }
+
+    function openModal(year, month, day) {
+      selectedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      document.getElementById('entryDate').innerText = `Entry for ${selectedDate}`;
+
+      if (entries[selectedDate]) {
+        document.getElementById('moodText').value = entries[selectedDate].moodText || '';
+        document.getElementById('moodRating').value = entries[selectedDate].moodRating || '';
+        document.getElementById('keywords').value = entries[selectedDate].keywords || '';
+      } else {
+        document.getElementById('moodText').value = '';
+        document.getElementById('moodRating').value = '';
+        document.getElementById('keywords').value = '';
+      }
+
+      document.getElementById('entryModal').style.display = 'block';
+    }
+
+    function generateCalendar(year, month) {
+      currentYear = year;
+      currentMonth = month;
+
+      const calendar = document.getElementById('calendar');
+      calendar.innerHTML = '';
+
+      document.getElementById('monthYear').innerText = `${new Date(year, month).toLocaleString('default', { month: 'long' })} ${year}`;
+
+      // Days of week headers
+      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      for (let dayName of daysOfWeek) {
+        const headerCell = document.createElement('div');
+        headerCell.textContent = dayName;
+        headerCell.style.fontWeight = 'bold';
+        headerCell.style.textAlign = 'center';
+        calendar.appendChild(headerCell);
+      }
+
+      const date = new Date(year, month, 1);
+      const firstDay = date.getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        const blank = document.createElement('div');
+        calendar.appendChild(blank);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const cell = document.createElement('div');
+        cell.textContent = day;
+        cell.style.padding = '20px';
+        cell.style.background = 'rgba(255, 255, 255, 0.2)';
+        cell.style.borderRadius = '10px';
+        cell.style.cursor = 'pointer';
+        cell.style.position = 'relative';
+        cell.style.textAlign = 'center';
+        cell.style.userSelect = 'none';
+
+        const cellDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+        if (entries[cellDate]) {
+          cell.style.background = '#3366cc';
+          cell.style.color = 'white';
+          cell.title = `${entries[cellDate].moodText} (Rating: ${entries[cellDate].moodRating})`;
+        }
+
+        cell.addEventListener('mouseenter', () => {
+          const existingTooltip = cell.querySelector('.tooltip-preview');
+          if (!existingTooltip && entries[cellDate]) {
+            const tooltip = document.createElement('div');
+            tooltip.innerText = entries[cellDate].moodText.length > 50 ? entries[cellDate].moodText.substring(0, 50) + '...' : entries[cellDate].moodText;
+            tooltip.style.position = 'absolute';
+            tooltip.style.top = '100%';
+            tooltip.style.left = '50%';
+            tooltip.style.transform = 'translateX(-50%)';
+            tooltip.style.background = '#fff';
+            tooltip.style.color = '#333';
+            tooltip.style.padding = '5px 10px';
+            tooltip.style.borderRadius = '8px';
+            tooltip.style.fontSize = '12px';
+            tooltip.style.boxShadow = '0 0 10px rgba(0,0,0,0.2)';
+            tooltip.style.whiteSpace = 'nowrap';
+            tooltip.className = 'tooltip-preview';
+            cell.appendChild(tooltip);
+          }
+        });
+
+        cell.addEventListener('mouseleave', () => {
+          const tooltip = cell.querySelector('.tooltip-preview');
+          if (tooltip) tooltip.remove();
+        });
+
+        cell.addEventListener('click', () => openModal(year, month, day));
+        calendar.appendChild(cell);
+      }
+    }
+
+    function changeMonth(offset) {
+      currentMonth += offset;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      } else if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      generateCalendar(currentYear, currentMonth);
+    }
+
+    async function analyzeMood() {
+      if (Object.keys(entries).length === 0) {
+        alert('No entries to analyze yet.');
+        return;
+      }
+
+      const analysisDiv = document.getElementById('analysisResult');
+      analysisDiv.style.display = 'block';
+      analysisDiv.innerHTML = `
+        <div class="spinner" style="border: 5px solid #f3f3f3; border-top: 5px solid #3366cc; border-radius: 50%; width: 40px; height: 40px; margin: auto;"></div>
+        <p style="margin-top: 10px;">Analyzing your mood... ✨</p>
+      `;
+
+      const formattedEntriesArray = Object.keys(entries).map((dateStr) => {
+        const { moodText, moodRating, keywords } = entries[dateStr];
+        const readableDate = new Date(dateStr).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        return `${readableDate}: Mood Rating ${moodRating}/10\nFeeling: ${moodText}\nKeywords: ${keywords || 'None'}`;
+      });
+
+      try {
+        const response = await fetch('http://localhost:3001/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ entries: formattedEntriesArray })
+        });
+
+        const data = await response.json();
+        analysisDiv.innerHTML = `<p>${data.analysis}</p>`;
+      } catch (error) {
+        console.error(error);
+        alert('Failed to get AI summary. Please try again.');
+      }
+    }
+
+    const today = new Date();
+    generateCalendar(today.getFullYear(), today.getMonth());
+  </script>
+
+</body>
+</html>

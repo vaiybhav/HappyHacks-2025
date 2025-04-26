@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Affirmation Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+</head>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, #a8edea, #fed6e3);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.8);
+      position: relative;
+      z-index: 10;
+    }
+    .navbar .logo {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .navbar .nav-right a {
+      margin-left: 15px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+    .mode-toggle {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+    .affirmation-container {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    .affirmation-container h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #3366cc;
+    }
+    .affirmation-container p {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    #themeInput {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+    .affirmation-container button {
+      background-color: #3366cc;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 16px;
+    }
+    .affirmation-container button:hover {
+      background-color: #254e8a;
+    }
+    #affirmationResult {
+      margin-top: 30px;
+      font-size: 18px;
+      font-weight: 500;
+      color: #333;
+      background: rgba(255,255,255,0.8);
+      padding: 15px;
+      border-radius: 10px;
+      min-height: 50px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .spinner {
+      animation: spin 1s linear infinite;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="particles-js"></div>
+
+  <nav class="navbar">
+    <div class="nav-left">
+      <div class="logo">Mindful Teens</div>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="challenges.html">Challenges</a>
+      <a href="contact.html">AI Tools</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="affirmation-container">
+      <h1>AI Affirmation Builder</h1>
+      <p>Pick a theme you're focusing on today, and receive a personalized, uplifting affirmation.</p>
+      <input type="text" id="themeInput" placeholder="Type a feeling, situation, or focus...">
+      <br>
+      <button onclick="getAffirmation()">Generate Affirmation</button>
+      <div id="affirmationResult"></div>
+    </div>
+  </main>
+
+  <script src="particles.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    async function getAffirmation() {
+      const theme = document.getElementById('themeInput').value;
+      const resultDiv = document.getElementById('affirmationResult');
+
+      if (!theme) {
+        resultDiv.innerText = "Please select a theme first!";
+        return;
+      }
+
+      resultDiv.innerHTML = `<div class="spinner" style="border: 5px solid #f3f3f3; border-top: 5px solid #3366cc; border-radius: 50%; width: 40px; height: 40px; margin: auto;"></div><p>Generating affirmation...</p>`;
+
+      try {
+        const response = await fetch('http://localhost:3002/affirmation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ theme })
+        });
+
+        const data = await response.json();
+        resultDiv.innerHTML = `<p>${data.affirmation}</p>`;
+      } catch (error) {
+        console.error(error);
+        resultDiv.innerText = "Sorry, something went wrong. Please try again later.";
+      }
+    }
+  </script>
+
+
+</body>
+</html>
