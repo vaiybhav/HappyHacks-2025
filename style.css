@@ -1,0 +1,158 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    height: 100%;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #0d1b2a;
+    color: #fff;
+    scroll-behavior: smooth;
+    position: relative;
+    overflow-x: hidden;
+  }
+  
+  #particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+  
+  /* Navbar */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10%;
+    background: rgba(0,0,0,0.3);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+  
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+  }
+  
+  .nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 15px;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-links a:hover {
+    border-color: #00b4d8;
+    background-color: #00b4d8;
+  }
+  
+  /* Hero */
+  .header {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 0 20px;
+  }
+  
+  .hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+  }
+  
+  .hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+  }
+  
+  .btn {
+    background: #00b4d8;
+    padding: 12px 30px;
+    border-radius: 30px;
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+  
+  .btn:hover {
+    background: #0096c7;
+  }
+  
+  /* Sections */
+  main {
+    padding-top: 80px;
+  }
+  
+  .section {
+    padding: 100px 10%;
+    max-width: 1200px;
+    margin: auto;
+    text-align: center;
+  }
+  
+  .section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #90e0ef;
+  }
+  
+  .section p, .section ul {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #cbd5e1;
+  }
+  
+  .section ul {
+    margin-top: 20px;
+    list-style: inside disc;
+  }
+  
+  .section ul li {
+    margin: 10px 0;
+  }
+  
+  .section ul li a {
+    color: #48cae4;
+    text-decoration: none;
+  }
+  
+  .section ul li a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Footer */
+  .footer {
+    background: #000814;
+    text-align: center;
+    padding: 20px;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+  }
+
+  #particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background-color: #0d1b2a; /* dark blue background */
+}
