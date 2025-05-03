@@ -3,8 +3,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
+require('dotenv').config();
+
 // Load your Gemini API key here
-const GEMINI_API_KEY = 'AIzaSyCSKmU7iOcts11J2df78jlENwMLqLTVUL8'; // <-- replace with your real Gemini API key
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 const app = express();
 app.use(cors());

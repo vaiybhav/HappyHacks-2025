@@ -1,10 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 // Use a DIFFERENT Gemini API key for wellness tracker
-const GEMINI_API_KEY_WELLNESS = 'AIzaSyCrRfcpdOgi2KqdBQoHs_R8401-9ATgpQE';
+const GEMINI_API_KEY_WELLNESS = process.env.GEMINI_API_KEY_WELLNESS;
 
 const app = express();
 app.use(cors());

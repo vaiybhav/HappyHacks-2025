@@ -9,7 +9,7 @@ const PORT = 3002; // Different from your other servers
 app.use(cors());
 app.use(express.json());
 
-const GEMINI_API_KEY_WELLNESS = 'AIzaSyCzEsHWA7hInfhja-Bl21UfewxbflinpKs';
+const GEMINI_API_KEY_WELLNESS = process.env.GEMINI_API_KEY_WELLNESS;
 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY_WELLNESS);
 
